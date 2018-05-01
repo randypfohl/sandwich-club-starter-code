@@ -37,6 +37,13 @@ public class JsonUtils {
     ]
     }
      */
+    public static final String JSON_NAME_KEY = "name";
+    public static final String JSON_MAIN_NAME_KEY = "mainName";
+    public static final String JSON_ALSO_KNOWN_AS_KEY = "alsoKnownAs";
+    public static final String JSON_PLACE_OF_ORIGIN_KEY = "placeOfOrigin";
+    public static final String JSON_DESCRIPTION_KEY = "description";
+    public static final String JSON_IMAGE_KEY = "image";
+    public static final String JSON_INGREDIENTS_KEY = "ingredients";
 
 
     public static Sandwich parseSandwichJson(String json) {
@@ -46,27 +53,35 @@ public class JsonUtils {
         try {
             JSONObject jsonObject = new JSONObject(json);
 
-            sandwich.setMainName(jsonObject.getJSONObject("name").getString("mainName"));
+            if(jsonObject.getJSONObject(JSON_NAME_KEY).has(JSON_MAIN_NAME_KEY))
+                sandwich.setMainName(jsonObject.getJSONObject(JSON_NAME_KEY).optString(JSON_MAIN_NAME_KEY));
 
-            JSONArray arr = jsonObject.getJSONObject("name").getJSONArray("alsoKnownAs");
-            List<String> altList= new ArrayList<>();
-            for(int i=0; i<arr.length() ; i++){
-                altList.add(arr.getString(i));
+            if(jsonObject.has(JSON_ALSO_KNOWN_AS_KEY)) {
+                JSONArray arr = jsonObject.getJSONObject(JSON_NAME_KEY).getJSONArray(JSON_ALSO_KNOWN_AS_KEY);
+                List<String> altList = new ArrayList<>();
+                for (int i = 0; i < arr.length(); i++) {
+                    altList.add(arr.getString(i));
+                }
+                sandwich.setAlsoKnownAs(altList);
             }
-            sandwich.setAlsoKnownAs(altList);
 
-            sandwich.setPlaceOfOrigin(jsonObject.getString("placeOfOrigin"));
+            if(jsonObject.has(JSON_PLACE_OF_ORIGIN_KEY))
+                sandwich.setPlaceOfOrigin(jsonObject.optString(JSON_PLACE_OF_ORIGIN_KEY));
 
-            sandwich.setDescription(jsonObject.getString("description"));
+            if(jsonObject.has(JSON_DESCRIPTION_KEY))
+                sandwich.setDescription(jsonObject.optString(JSON_DESCRIPTION_KEY));
 
-            sandwich.setImage(jsonObject.getString("image"));
+            if(jsonObject.has(JSON_IMAGE_KEY))
+                sandwich.setImage(jsonObject.optString(JSON_IMAGE_KEY));
 
-            JSONArray ingredients = jsonObject.getJSONArray("ingredients");
-            List<String> ingredientList= new ArrayList<>();
-            for(int i=0; i<arr.length() ; i++){
-                ingredientList.add(ingredients.getString(i));
+            if(jsonObject.has(JSON_INGREDIENTS_KEY)) {
+                JSONArray ingredients = jsonObject.getJSONArray(JSON_INGREDIENTS_KEY);
+                List<String> ingredientList = new ArrayList<>();
+                for (int i = 0; i < ingredientList.size(); i++) {
+                    ingredientList.add(ingredients.getString(i));
+                }
+                sandwich.setIngredients(ingredientList);
             }
-            sandwich.setIngredients(ingredientList);
 
         }
         catch (JSONException e)
