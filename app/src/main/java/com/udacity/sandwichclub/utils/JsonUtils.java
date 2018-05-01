@@ -56,7 +56,7 @@ public class JsonUtils {
             if(jsonObject.getJSONObject(JSON_NAME_KEY).has(JSON_MAIN_NAME_KEY))
                 sandwich.setMainName(jsonObject.getJSONObject(JSON_NAME_KEY).optString(JSON_MAIN_NAME_KEY));
 
-            if(jsonObject.has(JSON_ALSO_KNOWN_AS_KEY)) {
+            if(jsonObject.getJSONObject(JSON_NAME_KEY).has(JSON_ALSO_KNOWN_AS_KEY)) {
                 JSONArray arr = jsonObject.getJSONObject(JSON_NAME_KEY).getJSONArray(JSON_ALSO_KNOWN_AS_KEY);
                 List<String> altList = new ArrayList<>();
                 for (int i = 0; i < arr.length(); i++) {
@@ -77,7 +77,7 @@ public class JsonUtils {
             if(jsonObject.has(JSON_INGREDIENTS_KEY)) {
                 JSONArray ingredients = jsonObject.getJSONArray(JSON_INGREDIENTS_KEY);
                 List<String> ingredientList = new ArrayList<>();
-                for (int i = 0; i < ingredientList.size(); i++) {
+                for (int i = 0; i < ingredients.length(); i++) {
                     ingredientList.add(ingredients.getString(i));
                 }
                 sandwich.setIngredients(ingredientList);
